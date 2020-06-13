@@ -1,6 +1,6 @@
 formal('sub01-presentation')
 
-for trial = 1 : 96      ## Loop
+for trial = 1 : 20      ## Loop
     trial += 1;
 end
 
@@ -37,10 +37,16 @@ Screen('Filp', w);           # Refresh
          ACC(trial) = 1;                                   ## Correct
       else
          ACC(trial) = 0;                                   ## Wrong
-         Screen('DrawTexture', w, wrong, [], [a - wrongRect(3) / 2 , b - wrongRect(4) / 2 , a + wrongRect(3) / 2 , b + wrongRect(4) / 2])  ## Feedback
+         Screen('DrawTexture', w, wrong, [], [a - wrongRect(3) / 2, b - wrongRect(4) / 2, a + wrongRect(3) / 2, b + wrongRect(4) / 2])  ## Feedback
          Screen('Flip', w)
          WaitSecs(0.5)
       end
             
-fid = foen(['results/' filename 'RT.text'], 'w');
-fprintf(fid, '%s \ t%s \ t%s \ t%s \ t%s \ n' , 'Sub', )
+fid = fopen(['results/' filename 'RT.text'], 'w');
+fprintf(fid, '%s\t%s\t%s\t%s\t%s\n' , 'Sub', 'Trial', 'ifRED', 'ACC', 'RT');
+
+for j = 1 : trial
+fprintf(fid, '%s\t%2.Of\t%2.Of\t%2.Of\t%2.3f\n' , filename, j, ifred(j), ACC(j), RT(j));
+end
+
+fclose(fid)
