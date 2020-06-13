@@ -1,0 +1,46 @@
+formal('sub01-presentation')
+
+for trial = 1 : 96      ## Loop
+    trial += 1;
+end
+
+Screen('DrawTexture', w, fix, [], [a - fixRect(3) / 2 * ficScale, b - fixRect(4) / 2 * ficScale, a + fixRect(3) / 2 * ficScale, b + fixRect(4) / 2 * ficScale]);   ## Fixation
+
+Screen ('Flip', w);     ## Screen Content
+
+WaitSecs(1);            ## Duration
+
+Screen('FillRect', w, ColorData{ifRed(trial) + 1}, [a - ac, b - ac, a + ac, b + ac]);
+Screen('Filp', w);           # Refresh
+      start_time = GetSecs 
+      while GetSecs - start_time < 1 - frame_duration
+            [keyindown, secs, keycode] = KbCheck;
+            WaitSecs(0.001);
+            if keycode(escapekey)
+                 RT(trial) = GetSecs - start_time;
+                 response_code(trial) = 3;              
+                 break
+            end
+            if keycode(F)
+               RT(trial) = GetSecs - start_time;                ##  Record reaction time
+               response_code(trial) = 2;                        ##  Record key response
+               break
+            end
+            if keycode(J)
+               RT(trial) = GetSecs - start_time;
+               response_code(trial) = 1;
+               break
+            end
+      end
+      
+      if response_code(trial) == ifRED(trial) + 1
+         ACC(trial) = 1;                                   ## Correct
+      else
+         ACC(trial) = 0;                                   ## Wrong
+         Screen('DrawTexture', w, wrong, [], [a - wrongRect(3) / 2 , b - wrongRect(4) / 2 , a + wrongRect(3) / 2 , b + wrongRect(4) / 2])  ## Feedback
+         Screen('Flip', w)
+         WaitSecs(0.5)
+      end
+            
+fid = foen(['results/' filename 'RT.text'], 'w');
+fprintf(fid, '%s \ t%s \ t%s \ t%s \ t%s \ n' , 'Sub', )
